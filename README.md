@@ -2,7 +2,7 @@
 
 # OracleNodeSimCode
 
-This repository contains the Python implementation of the oracle node reliability framework proposed in the research paper *[insert paper title]*. The framework is designed to assess the reliability of oracle nodes in decentralised networks using trust score mechanisms and adaptive testing.
+This repository contains the Python implementation of the oracle node reliability framework. The framework is designed to assess the reliability of oracle nodes in decentralised networks using trust score mechanisms and adaptive testing.
 
 ## Overview
 
