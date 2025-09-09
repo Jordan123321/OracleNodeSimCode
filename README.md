@@ -1,10 +1,11 @@
-#Oracle Node Trust Simulation
+# Oracle Node Trust Simulation
 
-A small, reproducible codebase for evaluating adaptive trust mechanisms for blockchain oracle nodes.
+A small, reproducible codebase for evaluating **adaptive trust mechanisms** for blockchain oracle nodes.  
 It supports single-run experiments and parameter sweeps, with plots and CSV outputs suitable for inclusion in a paper’s artifact appendix.
 
-TL;DR
+## TL;DR
 
+```bash
 # 1) create env + install deps
 python -m venv .venv && source .venv/bin/activate  # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
@@ -20,10 +21,10 @@ All outputs (CSV + figures + resolved config) are written under the chosen --out
 ⸻
 
 Features
-	•	Trust updates: discounted (exponentially-weighted) frequentist updates and/or discounted Beta (Bayesian) updates.
+	•	Trust updates: discounted (exponentially weighted) frequentist updates and/or discounted Beta (Bayesian) updates.
 	•	Selection policies: trust-weighted sampling with configurable exponent; hooks for VRF-like or uniform baselines.
 	•	Stopping rules: target accuracy + confidence using Jeffreys or Wald intervals.
-	•	Correlation models (optional): Beta-Binomial over-dispersion, intra-class correlation, and simple collusion modes.
+	•	Correlation models (optional): Beta–Binomial over-dispersion, intra-class correlation, and simple collusion modes.
 	•	Parameter sweeps: grid/random sweeps over thresholds, decay, selection exponent, node mix, etc.
 	•	Reproducible outputs: resolved config, per-replicate CSVs, summaries, and publication-ready plots (PNG/PDF/EPS).
 
@@ -118,11 +119,11 @@ configs/sweep_example.yaml
 base_config: configs/default.yaml
 
 sweep:
-  trust.decay:        [0.90, 0.95, 0.98]
-  trust.kick_threshold: [0.50, 0.55, 0.60]
-  selection.exponent: [1.0, 2.0, 3.0]
+  trust.decay:                [0.90, 0.95, 0.98]
+  trust.kick_threshold:       [0.50, 0.55, 0.60]
+  selection.exponent:         [1.0, 2.0, 3.0]
   nodes.incompetent.proportion: [0.05, 0.10, 0.20]
-  correlation.icc_rho: [0.0, 0.1]
+  correlation.icc_rho:        [0.0, 0.1]
 
 Each run saves the resolved config alongside results so you can trace exactly what was executed.
 
@@ -144,8 +145,8 @@ python -m scripts.run_sweep \
 
 Outputs (per run):
 	•	config_resolved.yaml — exact config used
-	•	replicates.csv — one row per replicate (time-to-confidence, false-pos/neg, survival counts, etc.)
-	•	summary.csv — aggregates (mean/CI across replicates)
+	•	replicates.csv — one row per replicate (time-to-confidence, temporary retentions/premature deactivations, survival counts, etc.)
+	•	summary.csv — aggregates (median/IQR/mean/stdev across replicates)
 	•	plots/ — publication-ready figures:
 	•	time_to_confidence.(png|pdf|eps)
 	•	false_positives_over_time.(png|pdf|eps)
@@ -156,8 +157,8 @@ Outputs (per run):
 ⸻
 
 Reproducibility
-	•	All randomness is seeded (run.seed) and propagated to NumPy/Scipy.
-	•	We pin library versions in requirements.txt.
+	•	All randomness is seeded (run.seed) and propagated to NumPy/SciPy.
+	•	Library versions are pinned in requirements.txt.
 	•	Every run stores its resolved config, CSVs, and plots under results/….
 
 ⸻
@@ -191,3 +192,4 @@ MIT License — see LICENSE.
 Support / Questions
 
 Please open an issue or PR with a minimal reproducible example (config + command).
+
