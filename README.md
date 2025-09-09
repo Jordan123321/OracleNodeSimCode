@@ -1,43 +1,60 @@
-Oracle Node Trust Simulation
+# Oracle Node Trust Simulation
 
-A small, reproducible codebase for evaluating adaptive trust mechanisms for blockchain oracle nodes.
+A small, reproducible codebase for evaluating **adaptive trust mechanisms** for blockchain oracle nodes.
 It supports single-run experiments and parameter sweeps, with plots and CSV outputs suitable for inclusion in a paper’s artifact appendix.
 
-TL;DR
+---
 
-# 1) create env + install deps
-python -m venv .venv && source .venv/bin/activate  # (Windows: .venv\Scripts\activate)
+## TL;DR
+
+### 1) create env + install deps
+
+```bash
+python -m venv .venv && source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
+```
 
-# 2) run a single experiment
-python -m scripts.run_test --config configs/default.yaml --out results/run_$(date +%F_%H%M)
+### 2) run a single experiment
 
-# 3) run a sweep
-python -m scripts.run_sweep --config configs/sweep_example.yaml --out results_sweep/$(date +%F_%H%M)
+```bash
+python -m scripts.run_test \
+  --config configs/default.yaml \
+  --out results/run_$(date +%F_%H%M)
+```
 
-All outputs (CSV + figures + resolved config) are written under the chosen --out directory.
+### 3) run a sweep
 
-⸻
+```bash
+python -m scripts.run_sweep \
+  --config configs/sweep_example.yaml \
+  --out results_sweep/$(date +%F_%H%M)
+```
 
-Features
-	•	Trust updates: discounted (exponentially-weighted) frequentist updates and/or discounted Beta (Bayesian) updates.
-	•	Selection policies: trust-weighted sampling with configurable exponent; hooks for VRF-like or uniform baselines.
-	•	Stopping rules: target accuracy + confidence using Jeffreys or Wald intervals.
-	•	Correlation models (optional): Beta–Binomial over-dispersion, intra-class correlation, and simple collusion modes.
-	•	Parameter sweeps: grid/random sweeps over thresholds, decay, selection exponent, node mix, etc.
-	•	Reproducible outputs: resolved config, per-replicate CSVs, summaries, and publication-ready plots (PNG/PDF/EPS).
+All outputs (CSV + figures + resolved config) are written under the chosen `--out` directory.
 
-⸻
+---
 
-Layout
+## Features
 
+* **Trust updates**: discounted (exponentially-weighted) frequentist updates and/or discounted **Beta** (Bayesian) updates.
+* **Selection policies**: trust-weighted sampling with configurable exponent; hooks for VRF-like or uniform baselines.
+* **Stopping rules**: target accuracy + confidence using **Jeffreys** or Wald intervals.
+* **Correlation models** *(optional)*: Beta-Binomial over-dispersion, intra-class correlation, and simple collusion modes.
+* **Parameter sweeps**: grid/random sweeps over thresholds, decay, selection exponent, node mix, etc.
+* **Reproducible outputs**: resolved config, per-replicate CSVs, summaries, and publication-ready plots (PNG/PDF/EPS).
+
+---
+
+## Layout
+
+```
 .
 ├─ src/
 │  ├─ oraclenode.py           # OracleNode class (types, accuracy, trust update)
 │  ├─ oracletest.py           # OracleTest (single run; selection + stopping rule)
 │  ├─ oraclebatchtest.py      # OracleBatchTest (multiple replicates; aggregates)
 │  ├─ oracleparamsweep.py     # ParameterSweepOracleBatchTest (grid/random sweeps)
-│  ├─ plotting.py             # Centralized plotting functions (seaborn/matplotlib)
+│  ├─ plotting.py             # Centralized plotting (seaborn/matplotlib)
 │  ├─ config.py               # Dataclasses + YAML load/validate + defaults
 │  └─ utils.py                # Seeding, hashing, timers, I/O helpers
 ├─ scripts/
@@ -50,18 +67,22 @@ Layout
 ├─ requirements.txt
 ├─ .gitignore
 └─ README.md
+```
 
-We intentionally keep no notebooks in this repo. All figures are generated via the CLI and src/plotting.py.
+> We intentionally keep **no notebooks** in this repo. All figures are generated via the CLI and `src/plotting.py`.
 
-⸻
+---
 
-Install
+## Install
 
+```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+```
 
-requirements.txt (pinned):
+**requirements.txt** (pinned):
 
+```
 python_version==3.11
 numpy==1.26.4
 scipy==1.13.1
@@ -69,16 +90,17 @@ pandas==2.2.2
 matplotlib==3.8.4
 seaborn==0.13.2
 pyyaml==6.0.2
+```
 
+---
 
-⸻
+## Configuration
 
-Configuration
+All “magic numbers” live in YAML. Below are **short** examples (use them as starters).
 
-All “magic numbers” live in YAML. Below are short examples (use them as starters).
+**`configs/default.yaml`**
 
-configs/default.yaml
-
+```yaml
 run:
   num_nodes: 1000
   replicates: 100
@@ -112,58 +134,69 @@ nodes:
   malicious:   { proportion: 0.01, mean: 0.25, std: 0.05 }
   incompetent: { proportion: 0.09, mean: 0.55, std: 0.05 }
   competent:   { proportion: 0.90, mean: 0.90, std: 0.05 }
+```
 
-configs/sweep_example.yaml
+**`configs/sweep_example.yaml`**
 
+```yaml
 base_config: configs/default.yaml
 
 sweep:
-  trust.decay:               [0.90, 0.95, 0.98]
-  trust.kick_threshold:      [0.50, 0.55, 0.60]
-  selection.exponent:        [1.0, 2.0, 3.0]
-  nodes.incompetent.proportion: [0.05, 0.10, 0.20]
-  correlation.icc_rho:       [0.0, 0.1]
+  trust.decay:                 [0.90, 0.95, 0.98]
+  trust.kick_threshold:        [0.50, 0.55, 0.60]
+  selection.exponent:          [1.0, 2.0, 3.0]
+  nodes.incompetent.proportion:[0.05, 0.10, 0.20]
+  correlation.icc_rho:         [0.0, 0.1]
+```
 
-Each run saves the resolved config alongside results so you can trace exactly what was executed.
+> Each run saves the **resolved config** alongside results so you can trace exactly what was executed.
 
-⸻
+---
 
-Usage
+## Usage
 
-Single run
+### Single run
 
+```bash
 python -m scripts.run_test \
   --config configs/default.yaml \
   --out results/run_$(date +%F_%H%M)
+```
 
-Parameter sweep
+### Parameter sweep
 
+```bash
 python -m scripts.run_sweep \
   --config configs/sweep_example.yaml \
   --out results_sweep/$(date +%F_%H%M)
+```
 
-Outputs (per run):
-	•	config_resolved.yaml — exact config used
-	•	replicates.csv — one row per replicate (time-to-confidence, premature deactivations, temporary retentions, survival counts, etc.)
-	•	summary.csv — aggregates (mean/CI across replicates)
-	•	plots/ — publication-ready figures:
-	•	time_to_confidence.(png|pdf|eps)
-	•	false_positives_over_time.(png|pdf|eps)
-	•	false_negatives_over_time.(png|pdf|eps)
-	•	incompetent_survival.(png|pdf|eps)
-	•	trust_distributions.(png|pdf|eps) (optional, if enabled)
+**Outputs** (per run):
 
-⸻
+* `config_resolved.yaml` — exact config used
+* `replicates.csv` — one row per replicate (time-to-confidence, false-pos/neg, survival counts, etc.)
+* `summary.csv` — aggregates (mean/CI across replicates)
+* `plots/` — publication-ready figures:
 
-Reproducibility
-	•	All randomness is seeded (run.seed) and propagated to NumPy/Scipy.
-	•	Library versions are pinned in requirements.txt.
-	•	Every run stores its resolved config, CSVs, and plots under results/….
+  * `time_to_confidence.(png|pdf|eps)`
+  * `false_positives_over_time.(png|pdf|eps)`
+  * `false_negatives_over_time.(png|pdf|eps)`
+  * `incompetent_survival.(png|pdf|eps)`
+  * `trust_distributions.(png|pdf|eps)` *(optional, if enabled)*
 
-⸻
+---
 
-.gitignore (suggestion)
+## Reproducibility
 
+* All randomness is seeded (`run.seed`) and propagated to NumPy/Scipy.
+* Library versions are pinned in `requirements.txt`.
+* Every run stores its **resolved config**, CSVs, and plots under `results/…`.
+
+---
+
+## .gitignore (suggestion)
+
+```
 # env
 .venv/
 __pycache__/
@@ -178,16 +211,16 @@ results*/
 .DS_Store
 .idea/
 .vscode/
+```
 
+---
 
-⸻
+## License
 
-License
+**MIT License** — see `LICENSE`.
 
-MIT License — see LICENSE.
+---
 
-⸻
-
-Support / Questions
+## Support / Questions
 
 Please open an issue or PR with a minimal reproducible example (config + command).
