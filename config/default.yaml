@@ -1,0 +1,47 @@
+# config/default.yaml
+
+seed: 42
+num_nodes: 1000
+
+mix:
+  malicious: 0.01
+  incompetent: 0.09
+  competent: 0.90
+
+acc:
+  mean_malicious: 0.25
+  std_malicious: 0.05
+  mean_incompetent: 0.55
+  std_incompetent: 0.05
+  mean_competent: 0.90
+  std_competent: 0.05
+
+trust:
+  initial_trust: 0.65
+  trust_cap: 0.95
+  trust_mode: beta_discounted    # ewma | beta_discounted
+  decay: 0.9
+  prior_a: 1.0
+  prior_b: 1.0
+  update_every: 10
+  kick_threshold: 0.55
+
+select:
+  exponent: 2.0
+  without_replacement: true
+  min_weight: 0.0
+
+stop:
+  mode: wilson                  # wilson | jeffreys
+  target: 0.5
+  confidence: 0.999
+  phi_overdispersion: 0.10
+  max_draws: 10000
+
+# Optional sweep config (comment out if not used yet)
+sweep:
+  repeats: 50
+  grid:
+    trust.decay: [0.7, 0.8, 0.9, 0.95]
+    select.exponent: [1.0, 1.5, 2.0]
+    stop.phi_overdispersion: [0.0, 0.1, 0.2]

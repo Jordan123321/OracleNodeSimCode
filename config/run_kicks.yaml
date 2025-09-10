@@ -1,0 +1,29 @@
+# configs/run_kicks.yaml
+seed: 42
+num_nodes: 200                # smaller pop so nodes get reused
+malicious_frac: 0.03
+incompetent_frac: 0.17
+
+# node accuracy model
+malicious_mean: 0.25
+incompetent_mean: 0.55
+competent_mean: 0.90
+accuracy_std: 0.05
+
+# trust + kicking
+initial_trust: 0.65
+trust_cap: 0.95
+trust_mode: discounted        # (discounted | ewma | beta) – whatever your code supports
+trust_decay: 0.90
+update_every: 1               # update *every* observation
+kick_threshold: 0.60          # stricter than 0.55 so incompetents get filtered
+
+# selection
+selection_exponent: 2.0
+sel_without_replacement: false  # allow repeats so trust can move
+
+# stopping (make the run long enough to see dynamics)
+target_accuracy: 0.70         # harder target → more draws
+confidence: 0.999
+min_draws: 300                # force at least 300 draws
+max_draws: 2000
