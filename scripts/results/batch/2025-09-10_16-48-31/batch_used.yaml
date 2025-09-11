@@ -1,0 +1,7 @@
+base_seed: 42
+basis: repo_root
+num_runs: 200
+per_run_csv: false
+per_run_plots: false
+seed_stride: 7
+yaml_source: /Users/jordan/Documents/GitHub/OracleNodeSimCode/config/batch.yaml

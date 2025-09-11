@@ -83,15 +83,19 @@ def plot_hist(df: pd.DataFrame,
 
 
 def plot_box(df: pd.DataFrame,
-             x: str,
+             x: Optional[str],
              y: str,
              title: str,
              xlabel: str,
              ylabel: str,
-             out_base: str | Path) -> None:
+             out_base: str) -> None:
     set_style()
-    fig, ax = plt.subplots(figsize=(6.4, 3.2))
-    sns.boxplot(data=df, x=x, y=y, ax=ax)
+    fig, ax = plt.subplots(figsize=(6.2, 3.2))
+    if x is None:
+        # y-only boxplot
+        sns.boxplot(y=df[y], ax=ax)
+    else:
+        sns.boxplot(data=df, x=x, y=y, ax=ax)
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)

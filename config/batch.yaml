@@ -1,0 +1,37 @@
+batch:
+  # population + behavior (these match your single-run keys)
+  num_nodes: 200
+  malicious_frac: 0.03
+  incompetent_frac: 0.17
+  competent_mean: 0.90
+  incompetent_mean: 0.55
+  malicious_mean: 0.25
+  accuracy_std: 0.05
+
+  # trust / selection
+  initial_trust: 0.65
+  trust_cap: 0.95
+  trust_mode: discounted         # or 'beta'
+  prior_a: 6.5         # <- add
+  prior_b: 3.5         # <- add
+  trust_decay: 0.9
+  update_every: 1
+  kick_threshold: 0.60
+  selection_exponent: 2.0
+  sel_without_replacement: false
+
+  # stopping / target
+  confidence: 0.999
+  target_accuracy: 0.70
+  min_draws: 300
+  max_draws: 2000
+
+  # IO / RNG
+  out_dir: results/batch
+  save_plots: false               # per-run plots off by default for speed
+  save_csv: false                 # per-run traces off by default for speed
+  seed: 42
+  seed_stride: 7
+
+  # batch control
+  num_runs: 200
